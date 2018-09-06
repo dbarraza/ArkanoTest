@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ComputerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Computer">
+          <Key>
+            <PropertyRef Name="ComputerId" />
+          </Key>
+          <Property Name="ComputerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Marca" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Memory">
+          <Key>
+            <PropertyRef Name="MemoryId" />
+          </Key>
+          <Property Name="MemoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marcar" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Capacidad" Type="int" Nullable="false" />
+          <Property Name="ComputerId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Memory_Computer">
+          <End Role="Computer" Type="Self.Computer" Multiplicity="1" />
+          <End Role="Memory" Type="Self.Memory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computer">
+              <PropertyRef Name="ComputerId" />
+            </Principal>
+            <Dependent Role="Memory">
+              <PropertyRef Name="ComputerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ComputerDbModelStoreContainer">
+          <EntitySet Name="Computer" EntityType="Self.Computer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Memory" EntityType="Self.Memory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Memory_Computer" Association="Self.FK_Memory_Computer">
+            <End Role="Computer" EntitySet="Computer" />
+            <End Role="Memory" EntitySet="Memory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ComputerDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Computer">
+          <Key>
+            <PropertyRef Name="ComputerId" />
+          </Key>
+          <Property Name="ComputerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Marca" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Memories" Relationship="ComputerDbModel.FK_Memory_Computer" FromRole="Computer" ToRole="Memory" />
+        </EntityType>
+        <EntityContainer Name="ComputerDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Computers" EntityType="Self.Computer" />
+          <EntitySet Name="Memories" EntityType="ComputerDbModel.Memory" />
+          <AssociationSet Name="FK_Memory_Computer" Association="ComputerDbModel.FK_Memory_Computer">
+            <End Role="Computer" EntitySet="Computers" />
+            <End Role="Memory" EntitySet="Memories" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Memory">
+          <Key>
+            <PropertyRef Name="MemoryId" />
+          </Key>
+          <Property Name="MemoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marcar" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Tipo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Capacidad" Type="Int32" Nullable="false" />
+          <Property Name="ComputerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Computer" Relationship="ComputerDbModel.FK_Memory_Computer" FromRole="Memory" ToRole="Computer" />
+        </EntityType>
+        <Association Name="FK_Memory_Computer">
+          <End Type="ComputerDbModel.Computer" Role="Computer" Multiplicity="1" />
+          <End Type="ComputerDbModel.Memory" Role="Memory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Computer">
+              <PropertyRef Name="ComputerId" />
+            </Principal>
+            <Dependent Role="Memory">
+              <PropertyRef Name="ComputerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ComputerDbModelStoreContainer" CdmEntityContainer="ComputerDbEntities">
+          <EntitySetMapping Name="Computers">
+            <EntityTypeMapping TypeName="ComputerDbModel.Computer">
+              <MappingFragment StoreEntitySet="Computer">
+                <ScalarProperty Name="ComputerId" ColumnName="ComputerId" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Memories">
+            <EntityTypeMapping TypeName="ComputerDbModel.Memory">
+              <MappingFragment StoreEntitySet="Memory">
+                <ScalarProperty Name="ComputerId" ColumnName="ComputerId" />
+                <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Marcar" ColumnName="Marcar" />
+                <ScalarProperty Name="MemoryId" ColumnName="MemoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
